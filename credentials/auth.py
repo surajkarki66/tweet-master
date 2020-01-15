@@ -1,5 +1,5 @@
 import tweepy as t
-from keys.keys import *
+import keys
 
 
 class Authentication:
