@@ -5,7 +5,7 @@ import tweepy as t
 class Profile:
     def __init__(self):
         self.bot = Authentication()
-        self.api = t.API(self.bot.authenticate())
+        self.api = t.API(self.bot.authenticate(), wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 
 
@@ -31,4 +31,17 @@ class Profile:
         friends = [{'name':friend.name, 'followers_count':friend.followers_count} for friend in self.followers ] 
         return friends
 
+
+    def get_messages(self):
+        self.message = self.api.list_direct_messages()
+
+        messages = [{'sender':self.api.get_user(i.message_create['sender_id']).name, 'reciever':self.api.get_user(i.message_create['target']['recipient_id']).name, 
+                                    'messages':i.message_create['message_data']['text']} for i in self.message]
+
+           
+        return messages
+
+            
+
+ 
 

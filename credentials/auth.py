@@ -1,10 +1,10 @@
 import tweepy as t
 
 
-consumer_key = 'cybcnsHSMiyi0aAmLkb2I17jd'
-consumer_secret = 'mW7ormNjJuhv051bh9giGTmKv6RecsEJhjorZv2tGY1CFLjmZa'
-access_token = '2896323368-zobzdN9hqpSdepwKVN1XpMuoOM0drCTKUbTLkch'
-access_token_secret = 'd9qwRG1Qc6xgg2GRUQZ7FMs9PGMEAZlr3Mm48Sxo8Ac1e'
+consumer_key = '6V9cUc5RtzqePAs4VIQtOHn1f'
+consumer_secret = 'p4aL79b0KFdNLscOBnttJhhXxD3PjrAT2oiijp7Mh6htpd2xix'
+access_token = '2896323368-Uk0ofBKyBKfiITbpD9D7wgl522lrbL1g3w2GVFp'
+access_token_secret = 'FHwk3CvgsuawjVmmDpLCrW97jryU9aUlh2G0J9t8PTMOu'
 
 
 
