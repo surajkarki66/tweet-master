@@ -7,7 +7,7 @@ class Tweet:
         self.bot = Authentication()
         self.api = t.API(self.bot.authenticate(), wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-    # GET Requests
+    # GET
 
     def user_tweets(self):
         username = 'Surazz karkey'
@@ -29,27 +29,96 @@ class Tweet:
                    'likes': i.favorite_count, 'created_at': i.created_at} for i in tweets]
         return tweets
 
+    def retweets_of_me(self):
+        retweets = self.api.retweets_of_me()
+        retweet = [{'text': i.text, 'user': i.user.name,
+                    'likes': i.favorite_count, 'created_at': i.created_at} for i in retweets]
+
+        return retweet
+
+    def get_specified_user_status(self, screenname):
+        tweets = self.api.user_timeline(screenname)
+        tweets = [{'status_id': i.id, 'text': i.text, 'author': i.user.name,
+                   'likes': i.favorite_count, 'created_at': i.created_at} for i in tweets]
+        return tweets
+
+    # POST
     def like_tweet(self):
         tweets = self.api.home_timeline()
-        try:
-            for i in tweets:
+        for i in tweets:
+            try:
                 status_id = i.id
                 self.api.create_favorite(status_id)
                 print("Liked->", i.text, "By ", i.user.name)
 
-        except t.TweepError as e:
-            print(e.reason)
+            except t.TweepError as e:
+                pass
 
-        finally:
-            for i in tweets:
-                print("Text", i.text, "BY->", i.user.name)
-                cmd = input("Press d to dislike individual tweets\nPress s to dislike all tweets")
-                if cmd == "d":
-                    status_id = i.id
-                    self.api.destroy_favorite(status_id)
+    def retweet(self):
+        tweets = self.api.home_timeline()
+        for i in tweets:
+            try:
+                status_id = i.id
+                self.api.retweet(status_id)
+                print("retweeted on", i.text)
 
-                elif cmd == "s":
-                    self.api.destroy_favorite(status_id)
+            except t.TweepError as e:
+                print(e.reason)
+                pass
 
-                else:
-                    return
+    def unretweeted(self):
+        tweets = self.api.home_timeline()
+        for i in tweets:
+            try:
+                status_id = i.id
+                self.api.unretweet(status_id)
+                print('Unretweeted on', i.text)
+
+            except t.TweepError as e:
+                print(e.reason)
+                pass
+
+    def reply_to_tweet(self, reply_message):
+        tweets = self.api.home_timeline()
+        for i in tweets:
+            try:
+                status_id = i.id
+                self.api.update_status(reply_message, status_id, auto_populate_reply_metadata=True)
+
+            except t.TweepError as e:
+                print(e.reason)
+                pass
+
+    def like_specified_user_status(self, screenname):
+        tweets = self.api.user_timeline(screenname)
+        for i in tweets:
+            try:
+                status_id = i.id
+                self.api.create_favorite(status_id)
+                print("Liked->", i.text, "By ", i.user.name)
+
+            except t.TweepError as e:
+                pass
+
+    def retweet_specified_user_status(self, screenname):
+        tweets = self.api.user_timeline(screenname)
+        for i in tweets:
+            try:
+                status_id = i.id
+                self.api.retweet(status_id)
+                print("retweeted")
+
+            except t.TweepError as e:
+                pass
+
+    def reply_to_specified_user_tweet(self, reply_message, screenname):
+        tweets = self.api.user_timeline(screenname)
+        for i in tweets:
+            try:
+                status_id = i.id
+                self.api.update_status(reply_message, status_id, auto_populate_reply_metadata=True)
+
+            except t.TweepError as e:
+                print(e.reason)
+                pass
+
