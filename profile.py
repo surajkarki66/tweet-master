@@ -7,41 +7,69 @@ class Profile:
         self.bot = Authentication()
         self.api = t.API(self.bot.authenticate(), wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-
+    # GET Requests
 
     def profile(self):
-        self.me = self.api.me()
-        name = self.me.name
-        followers_count = self.me.followers_count
-        following_count = self.me.friends_count
-        profile = [{'name':name, 'follower_count':followers_count, 'following_count':following_count}]
+        me = self.api.me()
+        name = me.name
+        followers_count = me.followers_count
+        following_count = me.friends_count
+        profile = [{'name': name, 'follower_count': followers_count, 'following_count': following_count}]
         return profile
 
-
     def get_following(self):
-        self.me = self.api.me()
-        self.friends = self.me.friends()
-        
-        friends = [{'name':friend.name, 'followers_count':friend.followers_count} for friend in self.friends ]
+        me = self.api.me()
+        friends = me.friends()
+
+        friends = [{'name': friend.name, 'followers_count': friend.followers_count} for friend in friends]
         return friends
 
-    
     def get_followers(self):
-        self.followers = self.api.followers()
-        friends = [{'name':friend.name, 'followers_count':friend.followers_count} for friend in self.followers ] 
+        followers = self.api.followers()
+        friends = [{'name': friend.name, 'followers_count': friend.followers_count} for friend in followers]
         return friends
-
 
     def get_messages(self):
-        self.message = self.api.list_direct_messages()
+        message = self.api.list_direct_messages()
 
-        messages = [{'sender':self.api.get_user(i.message_create['sender_id']).name, 'reciever':self.api.get_user(i.message_create['target']['recipient_id']).name, 
-                                    'messages':i.message_create['message_data']['text']} for i in self.message]
+        messages = [{'senders': self.api.get_user(i.message_create['sender_id']).name,
+                     'receivers': self.api.get_user(i.message_create['target']['recipient_id']).name,
+                     'messages': i.message_create['message_data']['text'],
+                     'hashtags':i.message_create['message_data']['entities']['hashtags']} for i in message]
 
-           
         return messages
+    
+    @staticmethod
+    def remove_duplicates(self, list_of_id):
+        unique_list = []
 
-            
+        for e in list_of_id:
+            if e not in unique_list:
+                unique_list.append(e)
 
- 
+        return unique_list
+
+    # POST request
+    def post_messages(self, text):
+        recipient_id_text = open('recipient_id.txt', "w")
+        message = self.api.list_direct_messages()
+        for i in message:
+            recipient_id = i.message_create['target']['recipient_id']
+            recipient_id_text.writelines(str(recipient_id) + '\n')
+
+        recipient_id_text.close()
+
+        f_read = open('recipient_id.txt', 'r')
+        r_Id = f_read.readlines()
+        r_Id = [line.strip() for line in r_Id]
+        r_id = self.remove_duplicates(self, r_Id)
+        f_read.close()
+        for i in r_id:
+            if i == "2896323368":
+                pass
+            else:
+                message = self.api.send_direct_message(i, text=text)
+                
+        return message
+
 
