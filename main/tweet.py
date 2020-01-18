@@ -5,7 +5,7 @@ import tweepy as t
 class Tweet:
     def __init__(self):
         self.bot = Authentication()
-        self.api = t.API(self.bot.authenticate(), wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+        self.api = t.API(self.bot.authenticate_user(), wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
     # GET
 
