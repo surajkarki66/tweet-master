@@ -4,6 +4,7 @@ import tkinter.messagebox as msgbox
 import tkinter.ttk as ttk
 
 from main.profile import Profile
+from message import Message
 
 
 class MainWindow(tk.Tk):
@@ -12,13 +13,19 @@ class MainWindow(tk.Tk):
         self.title("Tweet Master")
         self.geometry("1100x1050")
         self.resizable(False, False)
+        self.menubar = Menu(self)
+        self.filemenu = Menu(self.menubar, tearoff=0)
+        self.filemenu.add_command(label="View", command=self.show_messages)
+
+        self.menubar.add_cascade(label="Messages", menu=self.filemenu)
+        self.config(menu=self.menubar)
         self.label_0 = tk.Label(self, text='!!!!WELCOME TO THE TWEET MASTER!!!!', width=50, font=("bold", 20))
         self.label_0.place(x=100, y=43)
 
         self.label_1 = tk.Label(self, text='Your Profile', width=50, font=("bold", 20))
         self.label_1.place(x=100, y=103)
         self.profile = Profile()
-        self.home()
+        # self.home()
         self.label_1 = tk.Label(self, text='Followers Details', width=50, font=("bold", 20))
         self.label_1.place(x=-200, y=318)
 
@@ -100,6 +107,10 @@ class MainWindow(tk.Tk):
         for c in following:
             self.listbox_2.insert("", "end", values=(c['name'], c['followers_count'],
                                                      c['friends_count'], c['isVerified'], c['profile_image']))
+
+    def show_messages(self):
+        message = Message(self)
+        message.show()
 
     def on_closing(self):
         if msgbox.askokcancel("Quit", "Do you want to quit?"):

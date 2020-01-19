@@ -36,11 +36,9 @@ class Profile:
 
     def get_messages(self):
         message = self.api.list_direct_messages()
-
         messages = [{'senders': self.api.get_user(i.message_create['sender_id']).name,
                      'receivers': self.api.get_user(i.message_create['target']['recipient_id']).name,
-                     'messages': i.message_create['message_data']['text'],
-                     'hashtags': i.message_create['message_data']['entities']['hashtags']} for i in message]
+                     'messages': i.message_create['message_data']['text']} for i in message]
 
         return messages
 
