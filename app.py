@@ -110,7 +110,6 @@ class MainWindow(tk.Tk):
 
     def show_messages(self):
         message = Message(self)
-        message.show()
 
     def on_closing(self):
         if msgbox.askokcancel("Quit", "Do you want to quit?"):

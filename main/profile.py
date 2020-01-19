@@ -36,7 +36,7 @@ class Profile:
 
     def get_messages(self):
         message = self.api.list_direct_messages()
-        messages = [{'senders': self.api.get_user(i.message_create['sender_id']).name,
+        messages = [{'recipient_id': i.message_create['target']['recipient_id'],
                      'receivers': self.api.get_user(i.message_create['target']['recipient_id']).name,
                      'messages': i.message_create['message_data']['text']} for i in message]
 
@@ -74,3 +74,9 @@ class Profile:
                 message = self.api.send_direct_message(i, text=text)
 
         return message
+
+    def send_individual(self, text, recipient_id):
+        if recipient_id == "2896323368":
+            pass
+        else:
+            self.api.send_direct_message(recipient_id, text=text)
