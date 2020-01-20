@@ -21,7 +21,7 @@ class Profile:
         me = self.api.me()
         friends = me.friends()
         friends = [
-            {'name': friend.name, 'followers_count': friend.followers_count, 'friends_count': friend.friends_count,
+            {'ID': friend.id, 'name': friend.name, 'followers_count': friend.followers_count, 'friends_count': friend.friends_count,
              'isVerified': friend.verified,
              'profile_image': friend.profile_image_url_https} for friend in friends]
         return friends

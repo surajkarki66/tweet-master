@@ -84,6 +84,7 @@ class Menu:
     def show_following(self):
         followings = self.profile.get_following()
         for f in followings:
+            print('Id:', f['ID'])
             print('Name:', f['name'])
             print('Followers_Count:', f['followers_count'])
             print('Following', f['friends_count'])
