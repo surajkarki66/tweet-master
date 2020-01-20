@@ -11,12 +11,7 @@ class Tweet:
 
     def user_tweets(self):
         username = 'Surazz karkey'
-        user_stat = self.api.user_timeline(username)
-        for i in user_stat:
-            status_id = i.id
-            self.api.create_favorite(status_id)
-            print("Liked")
-
+        user_stat = self.api.user_timeline(username, count=10)
         user_tweet = [{'text': i.text, 'likes': i.favorite_count, 'retweet': i.retweet_count,
                        'isRetweeted': i.retweeted, 'reply_to': i.in_reply_to_screen_name,
                        'created_at': i.created_at} for i in user_stat]
@@ -31,7 +26,7 @@ class Tweet:
 
     def retweets_of_me(self):
         retweets = self.api.retweets_of_me()
-        retweet = [{'text': i.text, 'user': i.user.name,
+        retweet = [{'text': i.text, 'auther': i.user.name,
                     'likes': i.favorite_count, 'created_at': i.created_at} for i in retweets]
 
         return retweet
@@ -121,4 +116,3 @@ class Tweet:
             except t.TweepError as e:
                 print(e.reason)
                 pass
-
