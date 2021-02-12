@@ -2,6 +2,7 @@ import sys
 
 from main.profile import Profile
 from main.tweet import Tweet
+from main.tweet_analysis import StreamTweet
 
 
 class Menu:
@@ -25,31 +26,34 @@ class Menu:
             "14": self.retweet_specified,
             "15": self.reply_all,
             "16": self.reply_specific,
-            "17": self.quit
+            "17": self.analyze_tweet,
+            "18": self.quit
 
         }
 
     @staticmethod
     def display():
         print("""
-        WELCOME TO TWITTER BOT
-        1. To See Your Profile
-        2. To see Your Follower
-        3. To see Your Following
-        4. To see Your Messages
-        5. To send message to all
-        6. To send message individually
-        7. To see user tweets
-        8. To see friends tweets
-        9. To see retweets of me
-        10. To see specified user tweets
-        11. To like all tweets
-        12. To like specified user status
-        13. To retweet all home status
-        14. To retweet specified user
-        15. To reply all post
-        16. To reply specific post
-        17. To quit
+        <------------- WELCOME TO TWITTER BOT ------------>
+
+                    1. To See Your Profile
+                    2. To see Your Follower
+                    3. To see Your Following
+                    4. To see Your Messages
+                    5. To send message to all
+                    6. To send message individually
+                    7. To see user tweets
+                    8. To see friends tweets
+                    9. To see retweets of me
+                    10. To see specified user tweets
+                    11. To like all tweets
+                    12. To like specified user status
+                    13. To retweet all home status
+                    14. To retweet specified user
+                    15. To reply all post
+                    16. To reply specific post
+                    17. Tweet Analyze
+                    18. To quit
         """)
 
     def run(self):
@@ -155,7 +159,7 @@ class Menu:
             print('')
 
     def like_all(self):
-        like = self.tweet.like_tweet()
+        self.tweet.like_tweet()
         print("Liked")
 
     def like_specified(self):
@@ -181,9 +185,11 @@ class Menu:
         message = input("Enter the message:")
         self.tweet.reply_to_specified_user_tweet(message, name)
 
-
-
-
+    def analyze_tweet(self):
+        name = input("Enter the name of user:")
+        stream = StreamTweet(name)
+        stream.stream()
+        sys.exit(0)
 
     def quit(self):
         sys.exit(1)

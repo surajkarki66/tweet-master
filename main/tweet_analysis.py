@@ -1,8 +1,9 @@
+import re
 import time
 import json
-from textblob import TextBlob
 import matplotlib.pyplot as plt
-import re
+
+from textblob import TextBlob
 from tweepy.streaming import StreamListener
 from tweepy import Stream
 
@@ -10,14 +11,15 @@ from credentials.auth import Authentication
 
 
 class StreamTweet:
-    def __init__(self):
+    def __init__(self, username):
         self.auth = Authentication().authenticate_user()
+        self.username = username
 
     def stream(self):
         listener = TwitterStream()
         stream = Stream(self.auth, listener)
         #stream.filter(follow=['44196397'], is_async=True)
-        stream.filter(track=['Donald Trump'], is_async=True)
+        stream.filter(track=[self.username], is_async=True)
 
 
 class TwitterStream(StreamListener):
@@ -45,32 +47,27 @@ class TwitterStream(StreamListener):
 
         sentiment = 0
         for sen in blob.sentences:
-            senti = sentiment + sen.sentiment.polarity
             if sen.sentiment.polarity >= 0:
                 self.positive = self.positive + sen.sentiment.polarity
             else:
                 self.negative = self.negative + sen.sentiment.polarity
         self.compound = self.compound + sentiment
-        print(self.count)
         print(tweet.strip())
         print(sentiment)
-        print(t)
 
-        print(str(self.positive) + ' ' + str(self.negative) + ' ' + str(self.compound))
+        print(str(self.positive) + ' ' +
+              str(self.negative) + ' ' + str(self.compound))
         plt.axis([0, 100, -20, 20])
         plt.xlabel('Time')
         plt.ylabel('Sentiment')
-        plt.plot([t], [self.positive], 'go', [t], [self.negative], 'ro', [t], [self.compound], 'bo')
+        plt.plot([t], [self.positive], 'go', [t], [
+                 self.negative], 'ro', [t], [self.compound], 'bo')
         plt.show()
         plt.pause(0.0001)
-        if self.count == 200:
+        if self.count == 100:
             return False
         else:
             return True
 
     def on_error(self, status):
         print(status)
-
-
-a = StreamTweet()
-a.stream()
